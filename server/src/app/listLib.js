@@ -2,11 +2,6 @@ export default class BggList extends HTMLElement {
     #data = [];
     #selected;
 
-    constructor() {
-        super();
-        console.log('ListLib is in!');
-    }
-
     connectedCallback (){
         // ready for loading data from API
         fetch('https://bgg-json.azurewebsites.net/hot').then(
@@ -26,7 +21,7 @@ export default class BggList extends HTMLElement {
     render() {
         this.innerHTML = "<ul>";
         this.#data.forEach(
-            el=>{
+            el => {
                 this.innerHTML += `<li><img title="${el.name}" src="${el.thumbnail}" /></li>`;
             }
         );
@@ -34,15 +29,17 @@ export default class BggList extends HTMLElement {
 
         // add some event listeners
         [...this.getElementsByTagName("li")].forEach(
-            li=>li.addEventListener('click', ()=> {
-                this.#selected=li.childNodes[0].title;
-                const found = this.#data.find(el=>el.name==this.#selected);
-                this.setAttribute('like',JSON.stringify(found));
+            li => li.addEventListener('click', () => {
+                this.#selected = li.childNodes[0].title;
+                const found = this.#data.find(el => el.name == this.#selected);
+                this.notify(found);
             })
         );
-
-        // add some styling as well
     }
 
-    // ON CLICK OP ITEM = Attribute instellen op gekozen ITEM ???
+    notify(el){
+        this.setAttribute('like',JSON.stringify(el));
+        const ev = new CustomEvent('list:like', { bubbles: true, detail: el}); // bubbles = belangrijk ivm naar body toe
+        this.dispatchEvent(ev);
+    }
 }
