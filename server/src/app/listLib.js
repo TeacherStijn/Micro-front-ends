@@ -2,6 +2,8 @@ export default class BggList extends HTMLElement {
     #data = [];
     #selected;
 
+    // can add constructor with super call
+
     connectedCallback (){
         // ready for loading data from API
         fetch('https://bgg-json.azurewebsites.net/hot').then(
