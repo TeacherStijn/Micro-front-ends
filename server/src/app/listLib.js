@@ -4,7 +4,10 @@ export default class BggList extends HTMLElement {
     // can add constructor with super call
 
     connectedCallback (){
-        // ready for loading data from API
+        /* ready for loading data from API
+        You could also use an API (for now with no OATUH authentication from:
+        https://github.com/TeacherStijn/public-apis
+        */
         fetch('https://bgg-json.azurewebsites.net/hot').then(
             inp=>inp.json()
         ).then(
