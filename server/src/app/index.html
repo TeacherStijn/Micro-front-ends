@@ -10,12 +10,16 @@
             flex-wrap: nowrap;
         }
 
-        body>* {
-
-        }
-
         li {
             list-style-type: none;
+        }
+
+        li:hover {
+            cursor: pointer;
+        }
+
+        bgg-cart {
+            margin-left: 2em;
         }
     </style>
     <script src="main.js" type="module"></script>
@@ -25,6 +29,9 @@
         - Product team decides what features show where on the main page
         - Team marketing takes care of retrieving and showing the hotness list from Boardgamegeek
         - Client conversion team takes care of the wishlist/shoppingcart
+
+        If the custom elements are already added here in HTML,
+        you could also add attributes which can be immediatly read to do (f.e.) some event Listening
     -->
 </body>
 </html>

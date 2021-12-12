@@ -1,6 +1,5 @@
 export default class BggList extends HTMLElement {
     #data = [];
-    #selected;
 
     // can add constructor with super call
 
@@ -24,7 +23,10 @@ export default class BggList extends HTMLElement {
         this.innerHTML = "<ul>";
         this.#data.forEach(
             el => {
-                this.innerHTML += `<li><img title="${el.name}" src="${el.thumbnail}" /></li>`;
+                this.innerHTML += `<li>
+                                        <span>${el.rank})</span>
+                                        <span>${el.name}</span>
+                                   </li>`;
             }
         );
         this.innerHTML += "</ul>";
@@ -32,16 +34,28 @@ export default class BggList extends HTMLElement {
         // add some event listeners
         [...this.getElementsByTagName("li")].forEach(
             li => li.addEventListener('click', () => {
-                this.#selected = li.childNodes[0].title;
-                const found = this.#data.find(el => el.name == this.#selected);
-                this.notify(found);
+                const found = this.#data.find(el => el.name == li.childNodes[3].textContent);
+                this.selected = found;
             })
         );
     }
 
-    notify(el){
-        this.setAttribute('like',JSON.stringify(el));
-        const ev = new CustomEvent('list:like', { bubbles: true, detail: el}); // bubbles = belangrijk ivm naar body toe
+    // For monitoring attribute changes to the following attributes:
+    static get observedAttributes() {
+        return ['like'];
+    }
+
+    // For neatness added this function to monitor attributes added in the observedAttributes() list (so not every 'style=' change for example
+    attributeChangedCallback(attrName, oldVal, newVal) {
+        const ev = new CustomEvent('list:like', { bubbles: true, detail: JSON.parse(newVal)}); // bubbles = belangrijk ivm naar body toe
         this.dispatchEvent(ev);
+    }
+
+    get selected() {
+        this.getAttribute('like');
+    }
+
+    set selected(val) {
+        this.setAttribute('like', JSON.stringify(val));
     }
 }

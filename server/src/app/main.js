@@ -11,10 +11,11 @@ async function loadModule(tagName, cName, scriptLoc, fileName) {
     } else {
         throw new Error ('tagName has to contain a dash for future proofing HTML 5');
     }
-
 }
 
 window.onload = function() {
+    // This can be done in this way slightly 'headless', or in HTML itself.
+    // Could add attribute(s) with events to subscribe to
     loadModule('bgg-list', 'BggList', '.', 'listLib.js');
     loadModule('bgg-cart', 'BggCart', '.', 'cartLib.js');
 }
