@@ -5,11 +5,55 @@ export default class BggList extends HTMLElement {
        - fetch() to the https://bgg-json.azurewebsites.net/hot (or any other API)
        - write the response to a class variable like #data
        - call another function to render the data on the screen
+    */
 
+    #data = [];
 
+    connectedCallback() {
+        fetch('https://bgg-json.azurewebsites.net/hot').then(
+            inp=>inp.json()
+        ).then(
+            // Here we will have our data available
+            result => {
+                this.#data = result;
+                this.render();
+            }
+        )
+    }
+
+    /*
     create a 'disconnectedCallback()' function for later use
+    */
 
+    render() {
+       this.innerHTML = '<ul>';
+       this.#data.forEach(
+           el=> {
+               this.innerHTML += `
+                    <li>
+                        <span>${el.rank}</span>
+                        <span>${el.name}</span>
+                    </li>
+               `
+           }
+       );
+       this.innerHTML += '</ul>';
 
+       Array.from(document.getElementsByTagName('li')).forEach(
+           el=> {
+               el.addEventListener('click', (ev)=>{
+                   let found = this.#data.find(
+                       item=>item.name==el.childNodes[3].textContent
+                   );
+
+                   const custEv = new CustomEvent('list:like', { bubbles: true, detail: found });
+                   this.dispatchEvent(custEv);
+               });
+           }
+       )
+    }
+
+    /*
     create a 'render()'  function (name freely chosen)
        in which we will do:
        - fill the .innerHTML of *this* component by making:

@@ -13,4 +13,18 @@ export default class BggCart extends HTMLElement {
         create a 'disconnectedCallback()' function for later use
 
      */
+
+    #input;
+
+    connectedCallback() {
+        window.addEventListener('list:like', (ev) => {
+            this.#input=ev.detail;
+            this.innerHTML = `<h2>Chosen game: ${this.#input.name}</h2>
+                <img src="${this.#input.thumbnail}" alt="Foto van ${this.#input.name}" />
+                <br/>
+                <p>Rank: ${this.#input.rank}</p>
+                <button>Order</button>
+            `;
+        });
+    }
 }

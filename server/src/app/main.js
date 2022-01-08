@@ -7,7 +7,6 @@ async function loadModule(tagName, cName, scriptLoc, fileName) {
         document.body.appendChild(elem);
         const class2use = await import(`${scriptLoc}/${fileName}`);
         window.customElements.define(tagName, class2use.default);
-
     } else {
         throw new Error ('tagName has to contain a dash for future proofing HTML 5');
     }
