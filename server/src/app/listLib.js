@@ -9,49 +9,12 @@ export default class BggList extends HTMLElement {
 
     #data = [];
 
-    connectedCallback() {
-        fetch('https://bgg-json.azurewebsites.net/hot').then(
-            inp=>inp.json()
-        ).then(
-            // Here we will have our data available
-            result => {
-                this.#data = result;
-                this.render();
-            }
-        )
-    }
 
     /*
     create a 'disconnectedCallback()' function for later use
     */
 
-    render() {
-       this.innerHTML = '<ul>';
-       this.#data.forEach(
-           el=> {
-               this.innerHTML += `
-                    <li>
-                        <span>${el.rank}</span>
-                        <span>${el.name}</span>
-                    </li>
-               `
-           }
-       );
-       this.innerHTML += '</ul>';
 
-       Array.from(document.getElementsByTagName('li')).forEach(
-           el=> {
-               el.addEventListener('click', (ev)=>{
-                   let found = this.#data.find(
-                       item=>item.name==el.childNodes[3].textContent
-                   );
-
-                   const custEv = new CustomEvent('list:like', { bubbles: true, detail: found });
-                   this.dispatchEvent(custEv);
-               });
-           }
-       )
-    }
 
     /*
     create a 'render()'  function (name freely chosen)
@@ -68,9 +31,11 @@ export default class BggList extends HTMLElement {
                         - detail, set to the found element from the #data array
                 - Store the event in a variable
                 - Call the 'dispatchEvent' on *this* component and pass the newly created custom event as a parameter.
+        */
 
 
-       BONUS: instead of creating the CustomEvent in the event listener, we could set a local property of this component
+        /*
+       BONUS/ALTERNATIVE: instead of creating the CustomEvent in the event listener, we could set a local property of this component
               and listen for changes to it. Whenever it changes, we can emit the Event instead. For example:
 
             - set a class property like 'current'  or 'selected' to the matching array element you would click on as an LI.
